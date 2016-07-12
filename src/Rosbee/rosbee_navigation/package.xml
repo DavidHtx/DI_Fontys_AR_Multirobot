@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package>
+  <name>rosbee_navigation</name>
+  <version>0.0.1</version>
+  <description>The rosbee_navigation package</description>
+
+  <maintainer email="kris@todo.todo">kris</maintainer>
+
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roslaunch</build_depend>
+  <run_depend>gmapping</run_depend>
+  <run_depend>map_server</run_depend>
+  <run_depend>move_base</run_depend>
+  <run_depend>navfn</run_depend>
+  <run_depend>base_local_planner</run_depend>
+  <run_depend>dwa_local_planner</run_depend>
+  <run_depend>rosbee_bringup</run_depend>
+
+  <export>
+  </export>
+</package>

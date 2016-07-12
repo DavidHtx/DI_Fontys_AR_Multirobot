@@ -1,0 +1,15 @@
+<package>
+  <description brief="rosbee_node">
+
+     rosbee_node
+  </description>
+  <author>Roozbeh</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  
+  <depend package="rospy"/>
+  <depend package="roscpp"/>
+  <depend package="diagnostic_msgs"/>
+
+</package>
+

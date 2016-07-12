@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rosbee">
+  
+  <!-- motor_wheel_unit properties -->
+  <property name="motor_mount_width" value="0.055" />
+  <property name="motor_mount_length" value="0.055" />
+  <property name="motor_mount_height" value="0.055" />
+  <property name="motor_mount_vis_offset_y" value="0.0275" />
+
+
+  <property name="motor_radius" value="0.017" />
+  <property name="motor_height" value="0.083" />
+  <property name="motor_trans_z" value="-0.0402" />
+
+	<property name="wheel_gap" value="0.005" />  
+
+  <property name="wheel_radius" value="0.062" />
+  <property name="wheel_height" value="0.019" />
+  <property name="wheel_trans_y" value="0.019" />
+
+  <xacro:macro name="motor_wheel_unit" params="	name 
+  																							parent 
+  																							reflect 
+  																							offset_x
+  																							offset_y
+  																							offset_z">
+    
+    <joint name="${name}_motor_mount_joint" type="fixed">
+      <origin xyz="${offset_x} ${reflect * offset_y} ${offset_z}" rpy="0 0 0" />
+      <parent link="${parent}_link"/>
+      <child link="${name}_motor_mount_link"/>
+    </joint>
+    
+    <link name="${name}_motor_mount_link">
+      <visual>
+      	<geometry>
+      		
+          <!--<mesh filename="package://rosbee_description/meshes/500093_rvs_motormount_.stl" scale="0.02541 0.02541 0.02541"/>-->
+          <mesh filename="package://rosbee_description/meshes/500093_RVS_motorsteun_Rosbee_mm.stl" scale="0.001 0.001 0.001"/>
+      	</geometry>
+
+      	<origin rpy="0 ${-M_PI/2} ${-reflect * M_PI/2}" xyz="0 ${reflect * motor_mount_vis_offset_y} 0"/>
+      	<material name="black">
+        	<color rgba="0.1 0.1 0.1 1"/>
+      	</material>
+      </visual>
+    </link>
+    
+    <joint name="${name}_motor_joint" type="fixed">
+      <origin xyz="0 0 ${motor_trans_z}" rpy="0 0 0" />
+      <parent link="${name}_motor_mount_link"/>
+      <child link="${name}_motor_link"/>
+    </joint>
+
+    <link name="${name}_motor_link">
+      <visual>
+      <geometry>
+        <mesh filename="package://rosbee_description/meshes/1443_metal_gearmotor.stl" scale="0.001 0.001 0.001"/> 
+      </geometry>
+  		<origin rpy="0 0 ${(M_PI/2)+(reflect * (M_PI/2))}" xyz="0 ${reflect*0.003} 0.007"/>
+      <material name="black">
+        <color rgba="0.1 0.1 0.1 1"/>
+      </material>
+      </visual>
+    </link>
+
+    <joint name="${name}_wheelhub_joint" type="fixed">
+      <origin xyz="0 ${reflect * ((wheel_height/2) + wheel_gap + (motor_mount_width /2) )} 0" rpy="0 0 0" />
+      <parent link="${name}_motor_link"/>
+      <child link="${name}_wheelhub_link"/>
+    </joint>
+
+    <joint name="${name}_wheeltire_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent link="${name}_wheelhub_link"/>
+      <child link="${name}_wheeltire_link"/>
+    </joint>
+
+    <link name="${name}_wheelhub_link">
+      <visual>
+      <geometry>
+        <mesh filename="package://rosbee_description/meshes/bane_bots_wheel_hub.stl" scale="0.001 0.001 0.001"/>  
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="black">
+        <color rgba="0.1 0.1 0.1 1"/>
+      </material>
+      </visual>
+    </link>
+
+    <link name="${name}_wheeltire_link">
+      <visual>
+      <geometry>
+        <mesh filename="package://rosbee_description/meshes/bane_bots_tire.stl" scale="0.001 0.001 0.001"/>         
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="orange">
+        <color rgba="${240/255} ${101/255} ${26/255} 1"/>
+      </material>
+      </visual>
+    </link>
+
+  </xacro:macro>
+    
+</robot>

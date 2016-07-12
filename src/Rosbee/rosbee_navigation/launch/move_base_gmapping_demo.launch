@@ -1,0 +1,9 @@
+<launch>
+
+	<include file="$(find rosbee_navigation)/launch/gmapping.launch"/>
+	
+	<include file="$(find rosbee_navigation)/launch/move_base.launch">
+    <arg name="static_map" value="false"/>
+  </include>
+
+</launch>

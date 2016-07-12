@@ -1,0 +1,46 @@
+<!-- Starts up the robot node -->
+
+<launch>
+  <!-- The Robot Node -->
+  <node pkg="rosbee_node" type="robot_node.py" name="rosbee_node" respawn="false" output="screen">
+    <!--<param name="verbose" value="false"/>
+    <param name="update_rate" value="10"/>
+    <param name="fake_connection" value="false"/>
+    <param name="fake_respons" value="false"/>
+    <param name="port" value="/dev/ttyUSB0"/> 
+    <param name="baudrate" value="115200"/>
+    <param name="connection_timeout" value="60"/>
+    <param name="cmd_vel_timeout" value="0.6"/>
+    <param name="min_abs_yaw_vel" value="0.1"/>
+    <param name="max_abs_yaw_vel" value="2.0"/>
+    <param name="publish_tf" value="true"/>
+    <param name="odom_frame" value="odom"/> 
+    <param name="base_frame" value="base_footprint"/>
+    <param name="odom_angular_scale_correction" value="1.0"/>
+    <param name="odom_linear_scale_correction" value="1.0"/>-->
+	<!--<remap from="cmd_vel" to="mobile_base/commands/velocity" />-->
+  </node>
+  <node pkg="tf" type="static_transform_publisher" name="link1_broadcaster" args="-0.1 0 0.3 0 0 0 base_footprint camera_link 30" />
+  <!-- Odometry estimator -->
+  <!--<node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf">
+    <remap from="imu_data" to="imu/data"/>
+    <param name="freq" value="10.0"/>
+    <param name="sensor_timeout" value="1.0"/>
+    <param name="publish_tf" value="true"/>
+    <param name="odom_used" value="true"/>
+    <param name="imu_used" value="false"/>
+    <param name="vo_used" value="false"/>
+    <param name="output_frame" value="odom"/>
+  </node>-->
+
+  
+  <!-- velocity commands multiplexer -->
+  <!--<node pkg="nodelet" type="nodelet" name="mobile_base_nodelet_manager" args="manager"/>-->
+  <!--<node pkg="nodelet" type="nodelet" name="cmd_vel_mux" args="load cmd_vel_mux/CmdVelMuxNodelet mobile_base_nodelet_manager">-->
+	<!--<node pkg="nodelet" type="nodelet" name="cmd_vel_mux" args="load yocs_cmd_vel_mux/CmdVelMuxNodelet mobile_base_nodelet_manager">
+    <param name="yaml_cfg_file" value="$(find rosbee2)/param/mux.yaml"/>
+    <remap from="cmd_vel_mux/output" to="mobile_base/commands/velocity"/>   
+  </node>-->
+  
+
+</launch>

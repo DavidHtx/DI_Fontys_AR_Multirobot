@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rosbee">
+  
+  <!-- top_plate properties -->
+  <property name="top_plate_width" value="0.250" />
+  <property name="top_plate_length" value="0.250" />
+  <property name="top_plate_height" value="0.008" />
+       
+  <xacro:macro name="top_plate" params="name parent *origin">
+    
+    <joint name="${name}_joint" type="fixed">
+      <insert_block name="origin" />
+      <parent link="${parent}_link"/>
+      <child link="${name}_link"/>
+    </joint>
+    
+    <link name="${name}_link">
+      <visual>
+      <geometry>
+        <!-- <box size="${top_plate_length} ${top_plate_width} ${top_plate_height}"/> -->
+        <mesh filename="package://rosbee_description/meshes/500085_pc_ base plate.stl" scale="0.001 0.001 0.001"/>       
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="black">
+        <color rgba="0.1 0.1 0.1 1"/>
+      </material>
+      </visual>
+    </link>
+    
+  </xacro:macro>
+       
+       
+</robot>

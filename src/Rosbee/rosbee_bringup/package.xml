@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package>
+  <name>rosbee_bringup</name>
+  <version>0.0.1</version>
+  <description>The rosbee_bringup package</description>
+
+  <maintainer email="kris@todo.todo">kris</maintainer>
+
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roslaunch</build_depend>
+  <run_depend>rosbee_node</run_depend>
+  <run_depend>rosbee_description</run_depend>
+  <run_depend>joy</run_depend>
+  <run_depend>teleop_twist_joy</run_depend>
+  <run_depend>freenect_launch</run_depend>
+  <run_depend>depthimage_to_laserscan</run_depend>
+
+  <export>
+
+  </export>
+</package>

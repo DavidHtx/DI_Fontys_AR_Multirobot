@@ -1,0 +1,7 @@
+<launch>
+
+	<include file="$(find rosbee_bringup)/launch/minimal.launch"/>
+	
+	<include file="$(find rosbee_bringup)/launch/xtion_laser.launch"/>
+
+</launch>

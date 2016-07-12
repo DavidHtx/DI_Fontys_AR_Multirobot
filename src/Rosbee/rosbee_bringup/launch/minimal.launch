@@ -1,0 +1,16 @@
+<launch>
+
+	<param name="/use_sim_time" value="false" />
+
+	<!-- publish robot model -->
+	<param name="robot_description" command="$(find xacro)/xacro.py '$(find rosbee_description)/robots/rosbee.urdf.xacro'" />
+
+	<!-- start robot state publisher node -->
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+		<param name="publish_frequency" type="double" value="20.0"/>
+	</node>
+
+	<!-- start the robot node for communication between ROS and Parallax -->
+	<include file="$(find rosbee_node)/launch/robot_node.launch" />
+	
+</launch>

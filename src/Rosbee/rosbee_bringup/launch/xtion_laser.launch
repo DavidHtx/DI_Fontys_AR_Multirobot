@@ -1,0 +1,15 @@
+<launch>
+	<!-- 	start openni2 driver for xtion sensor
+				http://wiki.ros.org/openni2_launch	-->
+	<include file="$(find openni2_launch)/launch/openni2.launch"/>
+	
+	<!-- 	Convert kinect depth image to laser data using depthimage_to_laserscan 
+				http://wiki.ros.org/depthimage_to_laserscan	-->
+	<node name="rosbee_depthimage_to_laserscan" pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" > 
+  	<remap from="image" to="/camera/depth/image"/>
+  	<param name="scan_height" type="int" value="1" />
+  	<param name="range_min" type="double" value="0.45" />
+  	<param name="range_max" type="double" value="3.5" />
+  	<param name="output_frame_id" type="str" value="camera_depth_frame" />
+	</node>
+</launch>

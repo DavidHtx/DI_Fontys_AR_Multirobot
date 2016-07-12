@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<launch>
+<node name="teleop_1" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" output="screen" launch-prefix="xterm -e" args="-t /robot_1/cmd_vel" />
+</launch>

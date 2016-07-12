@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rosbee">
+       
+  <!--  Includes for various component xacros -->  
+  <xacro:include filename="$(find rosbee_description)/urdf/components/top_plate.urdf.xacro" />
+  <xacro:include filename="$(find rosbee_description)/urdf/components/bottom_plate.urdf.xacro" />
+  <xacro:include filename="$(find rosbee_description)/urdf/components/spacer.urdf.xacro" />
+  <xacro:include filename="$(find rosbee_description)/urdf/components/kinect.urdf.xacro" />
+  <xacro:include filename="$(find rosbee_description)/urdf/components/motor_wheel_unit.urdf.xacro" />
+  <xacro:include filename="$(find rosbee_description)/urdf/components/swivel_wheel_unit.urdf.xacro" />  
+    
+  <!-- The bottom plate acts as our base_link -->
+  <xacro:bottom_plate name="base">
+    <origin xyz="0 0 0.104" rpy="0 0 0" />
+  </xacro:bottom_plate>
+  
+  <!--  Spacers between bottom_plate and top_plate -->
+  <xacro:spacer name="spacer_1" parent="base">
+    <origin xyz="0.10 0.10 0.000" rpy="0 0 0" />
+  </xacro:spacer>
+
+  <xacro:spacer name="spacer_2" parent="base">
+    <origin xyz="0.10 -0.10 0.000" rpy="0 0 0" />
+  </xacro:spacer>
+
+  <xacro:spacer name="spacer_3" parent="base">
+    <origin xyz="-0.10 -0.10 0.000" rpy="0 0 0" />
+  </xacro:spacer>
+
+  <xacro:spacer name="spacer_4" parent="base">
+    <origin xyz="-0.10 0.10 0.000" rpy="0 0 0" />
+  </xacro:spacer>
+
+  <xacro:top_plate name="top_plate" parent="base">
+    <origin xyz="0 0 0.059" rpy="0 0 0" />
+  </xacro:top_plate>
+  
+  <!-- TODO add wheel units -->
+  <xacro:motor_wheel_unit name="left"
+                          parent="base"
+                          reflect="1"
+                          offset_x="0"
+                          offset_y="0.127"
+                          offset_z="-0.003"/>
+
+  <xacro:motor_wheel_unit name="right"
+                          parent="base"
+                          reflect="-1"
+                          offset_x="0"
+                          offset_y="0.127"
+                          offset_z="-0.003"/>
+
+  <xacro:swivel_wheel_unit name="front"
+                          parent="base"
+                          reflect="1"
+                          offset_x="0.135"
+                          offset_y="0"
+                          offset_z="-0.0050"/>
+
+  <xacro:swivel_wheel_unit name="rear"
+                          parent="base"
+                          reflect="-1"
+                          offset_x="0.135"
+                          offset_y="0"
+                          offset_z="-0.0050"/> 
+  
+  <!--  kinect sensor -->
+  <xacro:sensor_kinect parent="top_plate_link">
+    <origin xyz="-0.100 0.0000 0.126" rpy="0 0 0"/> 
+  </xacro:sensor_kinect> 
+  
+</robot>

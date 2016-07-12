@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rosbee">
+  
+  <!-- swivel wheel unit properties -->
+  <property name="swivel_bracket_offset_z" value="-0.007" />
+  
+  <property name="swivel_wheel_offset_z" value="-0.055" />
+  <property name="swivel_wheel_offset_x" value="-0.0305" />
+  	
+  <xacro:macro name="swivel_wheel_unit" params="name 
+  																							parent 
+  																							reflect 
+  																							offset_x
+  																							offset_y
+  																							offset_z">
+    
+    <joint name="${name}_swivel_mount_joint" type="fixed">
+      <origin xyz="${reflect * offset_x} ${offset_y} ${offset_z}" rpy="0 0 0" />
+      <parent link="${parent}_link"/>
+      <child link="${name}_swivel_mount_link"/>
+    </joint>
+    
+    <link name="${name}_swivel_mount_link">
+      <visual>
+      <geometry>
+        <mesh filename="package://rosbee_description/meshes/swivel_mount.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="silver">
+        <color rgba="${124/255} ${127/255} ${128/255} 1"/>
+      </material>
+      </visual>
+    </link>
+    
+    <joint name="${name}_swivel_bracket_joint" type="fixed">
+      <origin xyz="0 0 ${swivel_bracket_offset_z}" rpy="0 0 0" />
+      <parent link="${name}_swivel_mount_link"/>
+      <child link="${name}_swivel_bracket_link"/>
+    </joint>
+
+    <link name="${name}_swivel_bracket_link">
+      <visual>
+      <geometry>
+        <mesh filename="package://rosbee_description/meshes/swivel_bracket.stl" scale="0.001 0.001 0.001"/>       
+      </geometry>
+      <origin rpy="0 ${M_PI} ${-M_PI/2}" xyz="0 0 0"/>
+			<material name="silver">
+        <color rgba="${124/255} ${127/255} ${128/255} 1"/>
+      </material>
+      </visual>
+    </link>
+
+    <joint name="${name}_swivel_wheel_joint" type="fixed">
+      <origin xyz="${swivel_wheel_offset_x} 0 ${swivel_wheel_offset_z}" rpy="0 0 0" />
+      <parent link="${name}_swivel_bracket_link"/>
+      <child link="${name}_swivel_wheel_link"/>
+    </joint>
+
+    <link name="${name}_swivel_wheel_link">
+      <visual>
+      <geometry>
+        <mesh filename="package://rosbee_description/meshes/swivel_wheel.stl" scale="0.001 0.001 0.001"/>         
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="orange">
+        <color rgba="${240/255} ${101/255} ${26/255} 1"/>
+      </material>
+      </visual>
+    </link>
+
+  </xacro:macro>
+    
+</robot>

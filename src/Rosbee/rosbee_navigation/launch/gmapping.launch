@@ -1,0 +1,9 @@
+<launch>
+	<node pkg="gmapping" type="slam_gmapping" name="rosbee_gmapping" output="screen">	
+	  <rosparam file="$(find rosbee_navigation)/config/gmapping/gmapping.yaml" command="load" />
+	  
+	  <remap from="scan"          to="/scan"/>
+	  <remap from="map"           to="/map"/>
+	  <remap from="map_metadata"  to="/map_metadata"/>
+	</node>
+</launch>

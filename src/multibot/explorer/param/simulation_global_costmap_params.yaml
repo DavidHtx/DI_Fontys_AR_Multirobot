@@ -1,0 +1,14 @@
+global_costmap:
+   robot_base_frame: /base_footprint
+   map_topic: map_merger/global_map
+   global_frame: /map
+   update_frequency: 0.166
+   publish_frequency: 0.166 #10.0
+   static_map: true
+   rolling_window: false
+   origin_x: 0.0
+   origin_y: 0.0
+   transform_tolerance: 10
+   track_unknown_space: true
+   unknown_cost_value: 255
+

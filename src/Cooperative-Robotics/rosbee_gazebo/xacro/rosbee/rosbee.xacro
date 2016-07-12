@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rosbee" >
+    
+  <!-- Import Rviz colors -->
+  <xacro:include filename="$(find rosbee_gazebo)/xacro/materials.xacro" />
+  
+  <!-- Import robot -->
+  <xacro:include filename="$(find rosbee_gazebo)/xacro/rosbee/rosbee_body.xacro"/>
+  <xacro:rosbee_body name="chassis" parent="base_link" meshes="package://rosbee_gazebo/meshes/rosbee"/>
+  
+  <!-- Laser  -->
+  <xacro:include filename="$(find rosbee_gazebo)/xacro/laser/hokuyo.xacro"/>
+  <xacro:laser name="front_laser" parent="chassis" xyz="0 0 0.181" rpy="0 0 0" meshes="package://rosbee_gazebo/meshes/laser"/>
+   
+  
+  <!-- GPU Laser
+  <xacro:include filename="$(find rosbee_gazebo)/xacro/laser/hokuyo_gpu.xacro"/>
+  <xacro:laser_gpu name="front_laser" parent="chassis" xyz="0.16 0 0.1" rpy="0 0 0" meshes="package://rosbee_gazebo/meshes/laser" />
+  
+  <xacro:include filename="$(find rosbee_gazebo)/xacro/camera/camera.xacro"/>
+  <xacro:cam name="front_camera" parent="chassis" xyz="0 0 0.5" rpy="0 0 0" />
+
+  -->
+
+  
+</robot>

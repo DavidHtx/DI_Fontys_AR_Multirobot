@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<launch>
+<!--<arg name="robot_macs" default="robot_0,00:00:00:00:00:11!" />!-->
+<arg name="log_path" default="$(env HOME)/logs" />
+<arg name="robot_local_map_frame" default="map" />
+<arg name="map_name" default="exploration_one.world"/>
+<arg name="output" default="screen" />
+<arg name="frontier_selection" default="5"/>
+<arg name="robot_name" default="lhs" />
+<arg name="robot_prefix" default=""/>
+<param name="/use_sim_time" value="true"/>
+<!--
+	Start simulation.
+	As far as we have only one robot in Stage, we simply start simulator and use top-topics.
+
+<node respawn="true" pkg="stage_ros" type="stageros" name="simulation" args="$(find explorer)/world/$(arg map_name)" />
+	We remap scan topic and 
+	set frames so that it could work
+
+<node name="slam_gmapping_0" pkg="gmapping" type="slam_gmapping" output="$(arg output)">
+<rosparam>
+odom_frame: /odom
+base_frame: /base_link
+map_update_interval: 1.0
+</rosparam>
+	<remap from="scan" to="/base_scan"/>
+	<remap from="map" to="/map"/>
+</node>
+
+	Setup network out of one node (our the only robot)
+!-->
+<node pkg="adhoc_communication" type="adhoc_communication" name="robot_0" respawn="true" output="$(arg output)">
+	<param name="mac" value="00:00:00:00:00:11"/>
+	<param name="robot_name" value="lhs"/>
+	<param name="interface" value="lo"/>
+	<param name="num_link_retrans" value="3" />
+	<param name="num_e2e_retrans" value="3" />
+	<param name="num_rreq" value="1" />
+	<param name="max_frame_size" value="1500" />
+	<param name="hop_limit_min" value="0" />
+	<param name="hop_limit_max" value="0" />
+	<param name="hop_limit_increment" value="3" />
+	<param name="max_packet_size" value="1500000" />
+	<param name="beacon_interval" value="100" />
+	<param name="enable_cooperative_relaying" value="true" />
+	<param name="simulation_mode" value="true"/>
+	<param name="robots_in_simulation" value="1" />
+	<!--
+	<param name="sim_robot_macs" value="$(arg robot_macs)" />
+	!-->
+	<param name="p_tx" value="1" />
+	<remap from="/lhs/adhoc_communication/new_robot" to="/adhoc_communication/new_robot"/>
+	<remap from="/lhs/adhoc_communication/remove_robot" to="/adhoc_communication/remove_robot"/>
+
+	<remap from="/lhs/base_pose_ground_truth" to="/base_pose_ground_truth"/>
+	<remap from="/lhs/adhoc_communication/send_frontier" to="/adhoc_communication/send_frontier"/>
+	<remap from="/lhs/adhoc_communication/send_auction" to="/adhoc_communication/send_auction"/>
+</node>
+<node pkg="map_merger" type="map_merger" name="map_merger" output="$(arg output)">
+   	<param name="log_path" value="$(arg log_path)" />
+	<param name="robot_name" value="lhs" />
+	<param name="robot_prefix" value="" />
+	<param name="local_map_frame_id" value="$(arg robot_local_map_frame)"/>
+	<param name="exchange_position" value="false" />
+	<param name="has_local_map" value="true" />
+	<param name="position_local_robot_topic" value="/odom" />
+	<param name="seconds_send_timer" value="8" />
+	<param name="seconds_pub_timer" value="6" />
+	<param name="seconds_recompute_transform" value="25" />
+	<param name="seconds_send_position" value="0" />
+	<param name="position_other_robots_topic" value="/position_other_robots"/>       
+    	<param name="split_size" value="2048" />
+    	<param name="splitted" value="true" />
+    	<param name="local_map_topic" value="/map" />
+    	<param name="meta_topic_over_network" value="/map_meta" />
+    	<param name="local_map_metadata_topic" value="/map_metadata" />
+	<remap from="/adhoc_communication/get_neighbors" to="/lhs/adhoc_communication/get_neighbors"/>
+	<remap from="/adhoc_communication/send_position" to="/lhs/adhoc_communication/send_position"/>
+	<remap from="/adhoc_communication/send_map_update" to="/lhs/adhoc_communication/send_map_update"/>
+	<remap from="/adhoc_communication/send_control_message" to="/lhs/adhoc_communication/send_control_message"/>
+	<remap from="/adhoc_communication/send_map" to="/lhs/adhoc_communication/send_map"/>
+</node>
+<!--
+	Make our robot movable with this simple package. 
+	NOTICE: The package should be not from original, but from https://github.com/LeoSko/teleop_twist_keyboard
+-->
+<node name="teleop_twist_keyboard_0" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" output="screen" launch-prefix="xterm -e" args="-t /cmd_vel" respawn="true"/>
+<!-- 
+	Start navigation stack
+-->
+<node respawn="true" pkg="move_base" type="move_base" name="move_base">
+	<param name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS"/>
+	<param name="controller_frequency" value="5"/>
+
+	<rosparam file="$(find explorer)/param/simulation_costmap_common_params.yaml" command="load" ns="global_costmap" />
+	<rosparam file="$(find explorer)/param/simulation_costmap_common_params.yaml" command="load" ns="local_costmap" />
+	<rosparam file="$(find explorer)/param/simulation_local_costmap_params.yaml" command="load" />
+	<rosparam file="$(find explorer)/param/simulation_global_costmap_params.yaml" command="load" />
+	<rosparam file="$(find explorer)/param/base_local_planner_params.yaml" command="load" />
+    
+</node>
+<!-- 
+	Start exploration package
+-->
+<node respawn="true" pkg="explorer" type="explorer" name="explorer" output="$(arg output)">
+	<!-- costmaps -->
+	<param name="robot_prefix" value="$(arg robot_prefix)"/>
+
+	<!-- simulation parameters -->
+	<param name="log_path" value="$(arg log_path)" />
+	<param name="robot_name" value="$(arg robot_name)" />
+
+	<!-- params for move_base -->
+	<param name="base_link" value="$(arg robot_prefix)/base_link" />
+	<param name="move_base_frame" value="/map" />
+	<param name="wait_for_planner_result" value="1" />
+
+	<!-- exploration parameters -->
+	<param name="frontier_selection" value="$(arg frontier_selection)" />
+	<rosparam file="$(find explorer)/param/simulation_costmap_common_params.yaml" command="load" ns="global_costmap" />
+	<rosparam file="$(find explorer)/param/simulation_costmap_common_params.yaml" command="load" ns="local_costmap" />
+	<rosparam file="$(find explorer)/param/simulation_local_costmap_params.yaml" command="load" />
+	<rosparam file="$(find explorer)/param/simulation_global_costmap_params.yaml" command="load" />
+	<rosparam file="$(find explorer)/param/base_local_planner_params.yaml" command="load" />
+    
+</node>
+<!--
+  Visualising the robot while building a map or navigating.
+<node name="rviz" pkg="rviz" type="rviz" args="-d $(find explorer)/rviz/explore_one.rviz"/>
+
+</launch>

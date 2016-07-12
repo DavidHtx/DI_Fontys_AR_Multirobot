@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rosbee">
+  
+  <!-- spacer properties -->
+  <property name="spacer_diameter" value="0.015" />
+  <property name="spacer_height" value="0.059" />
+         
+  <xacro:macro name="spacer" params="name parent *origin">
+    
+    <joint name="${name}_joint" type="fixed">
+      <insert_block name="origin" />
+      <parent link="${parent}_link"/>
+      <child link="${name}_link"/>
+    </joint>
+    
+    <link name="${name}_link">
+      <visual>
+      <geometry>
+        <cylinder radius="${spacer_diameter/2.000}" length="${spacer_height}" />        
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 ${(spacer_height / 2.000)}"/>
+      <material name="black">
+        <color rgba="0.1 0.1 0.1 1"/>
+      </material>
+    </visual>
+    </link>
+
+  </xacro:macro>
+       
+       
+</robot>

@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  
+  <xacro:include filename="inertia_tensors.xacro"/>
+  <xacro:include filename="rosbee_chassis.xacro"/>
+  <xacro:include filename="battery_block.xacro"/>
+  <xacro:include filename="rosbee_wheel.xacro"/>
+  <xacro:include filename="rosbee_swivel.xacro"/>
+  <xacro:include filename="rosbee_swivel_front.xacro"/>
+  <xacro:include filename="rosbee_sonar.xacro"/>
+  <xacro:include filename="rosbee_plugins.xacro"/>
+  
+  <xacro:macro name="rosbee_body" params="name parent meshes">
+        
+    <!-- base_link -->
+    <link name="${parent}"/>
+    
+    <!-- Chassis -->
+    <xacro:rosbee_chassis name="${name}" parent="base_link" xyz="0 0 0" rpy="0 0 0"  meshes="${meshes}"/> 
+    
+    <!-- Front Sonar -->
+    <!-- <xacro:rosbee_sonar name="sonar" parent="${name}" xyz="0.109 0 0.209" rpy="0 0 0"  meshes="${meshes}"/> -->    
+    
+    <!-- Akku0 -->
+    <!-- <xacro:battery_block name="battery0" parent="${name}" x="-0.14" y="0.00"  z="0.13" mass="2.5" /> -->
+    
+    <!-- Wheels -->
+    <xacro:rosbee_wheel        side="right" parent="${name}"  xyz="0  0.168 0.0615" rpy="0 0 0" radius="0.0615" meshes="${meshes}"/>
+    <xacro:rosbee_wheel        side="left"  parent="${name}"  xyz="0 -0.168 0.0615" rpy="0 0 0" radius="0.0615" meshes="${meshes}"/>
+    <xacro:rosbee_swivel       side="back"  parent="${name}"  xyz="-0.15 0 0.055"   rpy="0 0 0" meshes="${meshes}"/>
+    <xacro:rosbee_swivel_front side="front" parent="${name}"  xyz="0.15 0 0.055"    rpy="0 0 0" meshes="${meshes}"/>
+
+    
+    <!-- Motor plugin -->
+    <xacro:rosbee_diff_drive />
+    
+    <!-- Joints plugin -->
+    <xacro:rosbee_joints_state_publisher />
+    
+  </xacro:macro>
+</robot>
